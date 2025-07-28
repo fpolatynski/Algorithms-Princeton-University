@@ -16,8 +16,7 @@ public class Percolation {
         // Creates Union Find data structure for all cells in grid
         uf = new WeightedQuickUnionUF(n*n + 2);
         // Creates grid with all open cells
-        grid = new boolean
-        [n][n];
+        grid = new boolean[n][n];
         for (int row = 0; row < n; row++){
             for (int col = 0; col < n; col++)
                 grid[row][col] = false;
@@ -27,7 +26,7 @@ public class Percolation {
             // connect first row to begin
             uf.union(begin, i);
             // connect last row to end
-            uf.union(end, n-i-1);
+            uf.union(end, n*n-i-1);
         }
     }
 
@@ -45,7 +44,7 @@ public class Percolation {
                 uf.union(row_col2uf_idx(row, col), row_col2uf_idx(row + 1, col)); 
             if (col > 0 && grid[row][col-1]) 
                 uf.union(row_col2uf_idx(row, col), row_col2uf_idx(row, col - 1)); 
-            if (col < dimention - 1 && grid[row][col-1]) 
+            if (col < dimention - 1 && grid[row][col+1]) 
                 uf.union(row_col2uf_idx(row, col), row_col2uf_idx(row, col + 1)); 
         }
     }
@@ -61,7 +60,9 @@ public class Percolation {
     // is the site (row, col) full?
     public boolean isFull(int row, int col){
         // check if site is connected with begin
-        return uf.find(row_col2uf_idx(row, col)) == uf.find(begin);
+        if (grid[row][col])
+            return uf.find(row_col2uf_idx(row, col)) == uf.find(begin);
+        return false;
     }
 
     // returns the number of open sites
@@ -81,5 +82,23 @@ public class Percolation {
     }
 
     // test client (optional)
-    public static void main(String[] args){}
+    public static void main(String[] args){
+        Percolation obj = new Percolation(5);
+        obj.open(0, 0);
+        obj.open(1, 0);
+        obj.open(2, 0);
+        System.out.println("Open Tesets");
+        System.out.println(obj.isOpen(0, 0) == true);
+        System.out.println(obj.isOpen(1, 0) == true);
+        System.out.println(obj.isOpen(3, 0) == false);
+        System.out.println("Percolation Tesets");
+        System.out.println(obj.percolates() == false);
+        obj.open(3, 1);
+        obj.open(4, 1);
+        System.out.println(obj.percolates() == false);
+        obj.open(2, 1);
+        System.out.println(obj.percolates() == true);
+        System.out.println("Number of open Test");
+        System.out.println(obj.numberOfOpenSites() == 6);
+    }
 }
