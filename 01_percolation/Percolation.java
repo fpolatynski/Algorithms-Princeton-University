@@ -1,5 +1,3 @@
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
@@ -38,6 +36,7 @@ public class Percolation {
         // Check if its not open
         if (!grid[row][col]){
             // Open site
+            count += 1;
             grid[row][col] = true;
             // Create connections for all open neighbors
             if (row > 0 && grid[row - 1][col]) 
@@ -60,7 +59,10 @@ public class Percolation {
     }
 
     // is the site (row, col) full?
-    public boolean isFull(int row, int col){return true;}
+    public boolean isFull(int row, int col){
+        // check if site is connected with begin
+        return uf.find(row_col2uf_idx(row, col)) == uf.find(begin);
+    }
 
     // returns the number of open sites
     public int numberOfOpenSites(){
@@ -68,7 +70,10 @@ public class Percolation {
     }
 
     // does the system percolate?
-    public boolean percolates(){return true;}
+    public boolean percolates(){
+        // check if beggining is connected with end
+        return uf.find(end) == uf.find(begin);
+    }
 
     // Convert row and col to Union Find index
     private int row_col2uf_idx(int row, int col){
