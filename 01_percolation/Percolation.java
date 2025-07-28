@@ -83,6 +83,7 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args){
+        // Test
         Percolation obj = new Percolation(5);
         obj.open(0, 0);
         obj.open(1, 0);
