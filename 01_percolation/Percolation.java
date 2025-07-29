@@ -33,36 +33,39 @@ public class Percolation {
     // opens the site (row, col) if it is not open already
     public void open(int row, int col){
         // Check if its not open
-        if (!grid[row][col]){
+        if (!grid[row-1][col-1]){
             // Open site
             count += 1;
-            grid[row][col] = true;
+            grid[row-1][col-1] = true;
             // Create connections for all open neighbors
-            if (row > 0 && grid[row - 1][col]) 
+            if (row > 1 && grid[row - 2][col-1]) 
                 uf.union(row_col2uf_idx(row, col), row_col2uf_idx(row - 1, col)); 
-            if (row < dimention - 1 && grid[row + 1][col]) 
+            if (row < dimention && grid[row][col-1]) 
                 uf.union(row_col2uf_idx(row, col), row_col2uf_idx(row + 1, col)); 
-            if (col > 0 && grid[row][col-1]) 
+            if (col > 1 && grid[row-1][col-2]) 
                 uf.union(row_col2uf_idx(row, col), row_col2uf_idx(row, col - 1)); 
-            if (col < dimention - 1 && grid[row][col+1]) 
+            if (col < dimention && grid[row-1][col]) 
                 uf.union(row_col2uf_idx(row, col), row_col2uf_idx(row, col + 1)); 
         }
     }
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col){
-        if (row < grid.length && col < grid.length && row >= 0 && col >= 0)
-            return grid[row][col];
+        if (row <= dimention && col <= dimention && row > 0 && col > 0)
+            return grid[row-1][col-1];
         else
-            throw new IllegalArgumentException("row or col out of range");
+            throw new IllegalArgumentException("row: "+row+" or col: "+col+ " out of range");
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col){
-        // check if site is connected with begin
-        if (grid[row][col])
-            return uf.find(row_col2uf_idx(row, col)) == uf.find(begin);
-        return false;
+        if (row <= dimention && col <= dimention && row > 0 && col > 0){
+            // check if site is connected with begin
+            if (grid[row-1][col-1])
+                return uf.find(row_col2uf_idx(row, col)) == uf.find(begin);
+            return false;
+        } else
+            throw new IllegalArgumentException("row: "+row+" or col: "+col+ " out of range");
     }
 
     // returns the number of open sites
@@ -78,26 +81,26 @@ public class Percolation {
 
     // Convert row and col to Union Find index
     private int row_col2uf_idx(int row, int col){
-        return dimention * row + col;
+        return dimention * (row-1) + col-1;
     }
 
     // test client (optional)
     public static void main(String[] args){
         // Test
         Percolation obj = new Percolation(5);
-        obj.open(0, 0);
-        obj.open(1, 0);
-        obj.open(2, 0);
+        obj.open(1, 1);
+        obj.open(2, 1);
+        obj.open(3, 1);
         System.out.println("Open Tesets");
-        System.out.println(obj.isOpen(0, 0) == true);
-        System.out.println(obj.isOpen(1, 0) == true);
-        System.out.println(obj.isOpen(3, 0) == false);
+        System.out.println(obj.isOpen(1, 1) == true);
+        System.out.println(obj.isOpen(2, 1) == true);
+        System.out.println(obj.isOpen(3, 2) == false);
         System.out.println("Percolation Tesets");
         System.out.println(obj.percolates() == false);
-        obj.open(3, 1);
-        obj.open(4, 1);
+        obj.open(4, 2);
+        obj.open(5, 2);
         System.out.println(obj.percolates() == false);
-        obj.open(2, 1);
+        obj.open(3, 2);
         System.out.println(obj.percolates() == true);
         System.out.println("Number of open Test");
         System.out.println(obj.numberOfOpenSites() == 6);

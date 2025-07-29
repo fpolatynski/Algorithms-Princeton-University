@@ -4,7 +4,6 @@ import edu.princeton.cs.algs4.StdStats;
 public class PercolationStats {
     private double[] samples;
 
-
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials){
         samples = new double[trials];
@@ -14,11 +13,10 @@ public class PercolationStats {
             while(!experiment.percolates()){
                 int row = StdRandom.uniformInt(n);
                 int col = StdRandom.uniformInt(n);
-                experiment.open(row, col);
+                experiment.open(row+1, col+1);
             }
             samples[i] = (double) experiment.numberOfOpenSites() / (n*n);
         }
-
     }
 
     // sample mean of percolation threshold
