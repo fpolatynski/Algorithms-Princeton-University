@@ -31,7 +31,7 @@ public class WQUPC {
         if (size[pRoot] < size[qRoot]) {
             id[pRoot] = qRoot;
             size[qRoot] += size[pRoot];
-        } else if (size[pRoot] > size[qRoot]) {
+        } else {
             id[qRoot] = pRoot;
             size[pRoot] += size[qRoot];
         }

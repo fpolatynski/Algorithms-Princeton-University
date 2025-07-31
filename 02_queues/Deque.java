@@ -44,7 +44,31 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     // return an iterator over items in order from front to back
-    public Iterator<Item> iterator(){return null;}
+    public Iterator<Item> iterator(){
+        return new DequeIterator();
+    }
+
+    class DequeIterator implements Iterator<Item> {
+        int idx = left;
+
+        @Override
+        public boolean hasNext()
+        {
+            return idx != right;
+        }
+
+        @Override
+        public Item next()
+        {
+            idx++;
+            return array[idx % array.length];
+        }
+
+    }
+
+    private void resize(int size) {
+        Item[] newArray = (Item[])new Object[size];
+    }
 
     // unit testing (required)
     public static void main(String[] args){
@@ -66,7 +90,7 @@ public class Deque<Item> implements Iterable<Item> {
         System.out.println("addFirst, removeFirst, addLast, removeLast");
         System.out.println("Hi".equals(sut.removeFirst()));
         System.out.println("Hi1".equals(sut.removeFirst()));
-        sut.addFirst("H2");
+        sut.addFirst("Hi2");
         sut.addLast("Hi3");
         sut.addFirst("Hi1");
         sut.addLast("Hi4");
